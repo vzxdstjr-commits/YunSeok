@@ -1,0 +1,547 @@
+/* :root는 문서 전체에 적용할 기본 글꼴, 글자색, 배경색, 공통 색상 변수를 정합니다. */
+:root {
+  color-scheme: light;
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  color: #1e293b;
+  background: #f5f7fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --muted: #7b879a;
+  --line: #e8edf4;
+  --purple: #6558d3;
+}
+
+/* 모든 요소의 너비 계산에 테두리와 안쪽 여백을 포함해 작은 화면에서 넘침을 줄입니다. */
+* {
+  box-sizing: border-box;
+}
+
+/* 페이지의 기본 여백을 없애고, 320px보다 작은 화면에서도 최소한의 레이아웃을 유지합니다. */
+body {
+  min-width: 320px;
+  margin: 0;
+}
+
+/* 버튼과 폼 입력에도 페이지와 같은 글꼴을 사용하게 합니다. */
+button,
+input,
+select {
+  font: inherit;
+}
+
+/* 본문을 가운데 정렬하고 지나치게 넓어지지 않도록 최대 너비를 제한합니다. */
+.app-shell {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 44px 0 28px;
+}
+
+/* 제목 영역 아래에 요약 카드와의 간격을 둡니다. */
+.page-header {
+  margin-bottom: 28px;
+}
+
+/* 작은 영문 안내 문구에 공통으로 사용하는 강조 스타일입니다. */
+.eyebrow {
+  margin: 0 0 7px;
+  color: var(--purple);
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+/* 브라우저 기본 제목/문단 위쪽 여백을 통일해 직접 간격을 관리합니다. */
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+/* 페이지 제목은 화면 크기에 따라 조금씩 커지고, 글자 간격을 조정합니다. */
+h1 {
+  margin-bottom: 5px;
+  font-size: clamp(1.7rem, 4vw, 2.15rem);
+  letter-spacing: -0.06em;
+}
+
+/* 설명 문구는 본문보다 옅은 색으로 표시해 제목과 구분합니다. */
+.page-description,
+.summary-note {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* 요약 카드 세 개를 같은 너비의 열로 배치합니다. minmax(0, 1fr)은 좁은 화면에서
+   카드 안의 긴 숫자가 열 너비를 밀어내지 않게 합니다. */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+/* 요약 카드와 콘텐츠 패널의 공통 테두리, 모서리, 배경, 그림자입니다. */
+.summary-card,
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgb(37 55 89 / 3%);
+}
+
+/* 카드 내부 여백과 최소 너비를 설정합니다. */
+.summary-card {
+  min-width: 0;
+  padding: 20px 22px;
+}
+
+/* 첫 번째 월 구독료 카드만 연한 보라색 배경으로 강조합니다. */
+.summary-card-primary {
+  border-color: #e7e3ff;
+  background: linear-gradient(135deg, #f0eeff, #fff);
+}
+
+/* 카드의 항목 이름을 작은 보조 글씨로 표시합니다. */
+.summary-label {
+  margin-bottom: 10px;
+  color: #67738a;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* 금액을 굵고 크게 표시하며, 매우 긴 금액도 줄바꿈되어 화면 밖으로 나가지 않게 합니다. */
+.summary-value {
+  overflow-wrap: anywhere;
+  margin-bottom: 7px;
+  color: #202a40;
+  font-size: clamp(1.55rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+}
+
+/* 강조 카드의 금액에는 공통 보라색을 사용합니다. */
+.summary-card-primary .summary-value {
+  color: var(--purple);
+}
+
+/* 카드 아래 설명은 항목 이름보다 작고 은은하게 표시합니다. */
+.summary-note {
+  font-size: 0.73rem;
+}
+
+/* 구독 목록은 넓게, 카테고리/폼은 좁게 배치하는 두 열 레이아웃입니다. */
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.85fr);
+  align-items: start;
+  gap: 20px;
+}
+
+/* 흰색 콘텐츠 패널의 내부 여백과 최소 너비를 설정합니다. */
+.panel {
+  min-width: 0;
+  padding: 22px;
+}
+
+/* 구독이 없어도 목록 패널이 너무 작아 보이지 않도록 높이를 보장합니다. */
+.subscriptions-panel {
+  min-height: 300px;
+}
+
+/* 오른쪽의 카테고리와 입력 폼을 위아래로 쌓습니다. */
+.side-column {
+  display: grid;
+  gap: 20px;
+}
+
+/* 각 섹션 제목과 우측의 항목 수 등을 한 줄에 정렬합니다. */
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+/* 섹션 제목 안의 작은 영문 문구는 간격과 글자를 더 작게 조정합니다. */
+.section-heading .eyebrow {
+  margin-bottom: 3px;
+  font-size: 0.62rem;
+}
+
+/* 모든 2단계 제목의 기본 크기와 아래 여백입니다. */
+h2 {
+  margin-bottom: 0;
+  font-size: 1.12rem;
+  letter-spacing: -0.04em;
+}
+
+/* 구독 개수를 알약 모양 배경에 표시합니다. */
+.item-count {
+  flex: none;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #f2f3f8;
+  color: #687389;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* 구독 카드를 세로로 나열하고 카드 사이 간격을 둡니다. */
+.subscription-list {
+  display: grid;
+  gap: 10px;
+}
+
+/* 한 구독 카드 안에서 이름/아이콘과 가격 영역을 나란히 둡니다.
+   아래 수정/삭제 버튼은 전체 너비를 차지하도록 별도 규칙에서 배치합니다. */
+.subscription-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+}
+
+/* 아이콘과 서비스 이름을 나란히 배치하고 이름 영역이 줄어들 수 있게 합니다. */
+.subscription-main {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 구독 이름의 첫 글자를 보여주는 장식용 사각형입니다. */
+.service-mark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  place-items: center;
+  border-radius: 13px;
+  background: #f0eeff;
+  color: var(--purple);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+/* 서비스 이름 영역이 옆의 금액 영역을 밀어내지 않도록 너비를 제한합니다. */
+.service-details {
+  min-width: 0;
+}
+
+/* 긴 서비스 이름은 한 줄로 유지하고, 넘치는 부분은 …으로 줄입니다. */
+.service-name {
+  overflow: hidden;
+  margin-bottom: 3px;
+  font-size: 0.93rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 카테고리와 결제 주기 등 부가 정보를 작고 옅게 표시합니다. */
+.service-meta {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
+/* 금액과 D-day를 오른쪽으로 정렬하며, 가격이 너무 좁아지지 않게 합니다. */
+.service-payment {
+  min-width: 95px;
+  text-align: right;
+}
+
+/* 월 환산 가격은 굵게 표시하고 줄바꿈하지 않습니다. */
+.service-amount {
+  margin-bottom: 3px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* 남은 결제일은 보라색으로 강조합니다. */
+.service-dday {
+  margin-bottom: 0;
+  color: var(--purple);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* 이미 지난 결제일은 붉은색으로 구분합니다. */
+.service-dday.is-past {
+  color: #d45a61;
+}
+
+/* 수정/삭제 버튼을 카드 아래 오른쪽에 모아 배치합니다. */
+.card-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  gap: 7px;
+  margin-top: -2px;
+}
+
+/* 카드 안의 작은 동작 버튼에 공통 모양과 마우스 커서를 지정합니다. */
+.text-button {
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: #f5f6fa;
+  color: #5c6678;
+  cursor: pointer;
+  font-size: 0.72rem;
+}
+
+/* 마우스를 올린 버튼은 배경색과 글자색을 바꿔 선택 가능함을 표시합니다. */
+.text-button:hover {
+  background: #eaeaf8;
+  color: var(--purple);
+}
+
+/* 삭제 버튼은 마우스를 올렸을 때 위험 동작임을 붉은색으로 알립니다. */
+.text-button-delete:hover {
+  background: #fff0f0;
+  color: #c8424a;
+}
+
+/* 구독이 하나도 없을 때 중앙에 안내 메시지를 보여줍니다. */
+.empty-state {
+  padding: 42px 12px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.87rem;
+}
+
+/* 카테고리 막대를 세로로 나열합니다. */
+.category-list {
+  display: grid;
+  gap: 16px;
+}
+
+/* 데이터가 없을 때 카테고리 영역에 표시할 안내 문구입니다. */
+.category-empty {
+  margin: 0;
+  padding: 12px 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+/* 카테고리 이름/금액과 막대를 하나의 세로 묶음으로 만듭니다. */
+.category-row {
+  display: grid;
+  gap: 7px;
+}
+
+/* 카테고리 이름과 금액을 양쪽 끝에 배치합니다. */
+.category-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+/* 카테고리 이름을 조금 굵게 표시합니다. */
+.category-name {
+  font-weight: 600;
+}
+
+/* 카테고리 금액은 보조 색상으로 표시하며 줄바꿈하지 않습니다. */
+.category-value {
+  color: #687389;
+  white-space: nowrap;
+}
+
+/* 비중 막대의 회색 바탕입니다. overflow를 숨겨 안쪽 막대의 끝을 둥글게 자릅니다. */
+.category-track {
+  overflow: hidden;
+  height: 7px;
+  border-radius: 8px;
+  background: #f0f1f6;
+}
+
+/* 각 카테고리 지출 비율을 나타내는 색상 막대입니다.
+   실제 너비는 JavaScript가 비율에 맞춰 인라인 style로 지정합니다. */
+.category-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8076e8, #b3aaff);
+}
+
+/* 폼 필드를 세로로 쌓고 각 요소 사이에 간격을 줍니다. */
+.form-panel form {
+  display: grid;
+  gap: 8px;
+}
+
+/* 폼 입력칸 위의 이름표를 읽기 쉽도록 표시합니다. */
+.form-panel label {
+  margin-top: 5px;
+  color: #445066;
+  font-size: 0.77rem;
+  font-weight: 600;
+}
+
+/* 텍스트/숫자/날짜 입력칸과 선택 상자의 크기, 테두리, 내부 여백을 통일합니다. */
+.form-panel input,
+.form-panel select {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding: 0 11px;
+  border: 1px solid #dfe4ed;
+  border-radius: 9px;
+  outline: none;
+  background: #fff;
+  color: #273248;
+  font-size: 0.83rem;
+}
+
+/* 입력 중인 칸은 보라색 테두리와 은은한 외곽선으로 표시합니다. */
+.form-panel input:focus,
+.form-panel select:focus {
+  border-color: #9389eb;
+  box-shadow: 0 0 0 3px rgb(101 88 211 / 10%);
+}
+
+/* 저장과 취소 버튼을 같은 줄에 놓습니다. */
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* 모든 주요 버튼의 기본 높이, 모서리, 글꼴을 통일합니다. */
+.button {
+  min-height: 42px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+/* 저장 버튼은 가능한 남은 너비를 모두 사용하고 보라색으로 강조합니다. */
+.button-primary {
+  flex: 1;
+  background: var(--purple);
+  color: white;
+}
+
+/* 저장 버튼에 마우스를 올리면 배경색을 조금 어둡게 합니다. */
+.button-primary:hover {
+  background: #5549c1;
+}
+
+/* 취소 버튼은 저장 버튼보다 덜 강조되는 회색으로 표시합니다. */
+.button-secondary {
+  background: #f0f1f6;
+  color: #596479;
+}
+
+/* 오류 복구 중 비활성화된 폼 컨트롤은 클릭할 수 없음을 표시합니다. */
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* 저장이나 데이터 불러오기 결과 안내에 사용할 공간과 색상입니다. */
+.form-message {
+  min-height: 1.2em;
+  margin: 0;
+  color: #b13d45;
+  font-size: 0.75rem;
+}
+
+/* 페이지 맨 아래에 데이터 저장 위치 안내를 표시합니다. */
+.page-footer {
+  padding: 18px 0 0;
+  color: #8b95a6;
+  font-size: 0.73rem;
+  text-align: center;
+}
+
+/* 태블릿/작은 노트북에서는 전체 너비를 줄이고 콘텐츠를 한 열로 바꿉니다.
+   오른쪽 내부의 카테고리와 폼은 그때까지 두 열로 나란히 놓습니다. */
+@media (max-width: 760px) {
+  .app-shell {
+    width: min(100% - 32px, 600px);
+    padding-top: 30px;
+  }
+
+  .content-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .side-column {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+/* 휴대폰에서는 좌우 여백과 카드 안 여백을 줄여 375px 화면에도 맞춥니다. */
+@media (max-width: 520px) {
+  .app-shell {
+    width: calc(100% - 28px);
+    padding-top: 24px;
+  }
+
+  .summary-grid {
+    gap: 8px;
+  }
+
+  .summary-card {
+    padding: 14px 11px;
+    border-radius: 14px;
+  }
+
+  .summary-label {
+    min-height: 2.3em;
+    margin-bottom: 7px;
+    font-size: 0.7rem;
+    line-height: 1.25;
+  }
+
+  .summary-value {
+    font-size: clamp(1.05rem, 5vw, 1.5rem);
+  }
+
+  .summary-note {
+    font-size: 0.64rem;
+    line-height: 1.35;
+  }
+
+  .panel {
+    padding: 17px 14px;
+    border-radius: 15px;
+  }
+
+  .side-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .subscription-card {
+    gap: 8px;
+    padding: 12px 10px;
+  }
+
+  .subscription-main {
+    gap: 9px;
+  }
+
+  .service-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+  }
+
+  .service-payment {
+    min-width: 80px;
+  }
+}

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- 한글을 올바르게 표시하고, 휴대폰 화면의 실제 너비에 맞춰 레이아웃을 그리도록 설정합니다. -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7fb">
+    <title>구독 트래커</title>
+
+    <!-- CSS는 화면의 색상, 간격, 글자 크기와 반응형 배치를 담당합니다. -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!--
+      아래 스크립트는 위에서 아래 순서로 실행되어야 합니다.
+      logic.js의 함수들을 먼저 준비하고, ui.js가 화면 그리기 함수를 만든 뒤,
+      main.js가 두 파일의 기능을 연결합니다.
+      defer는 HTML 문서를 먼저 읽은 다음 이 순서대로 스크립트를 실행하게 합니다.
+    -->
+    <script src="js/logic.js" defer></script>
+    <script src="js/ui.js" defer></script>
+    <script src="js/main.js" defer></script>
+  </head>
+  <body>
+    <!-- 화면의 실제 콘텐츠를 감싸는 가장 바깥쪽 영역입니다. -->
+    <main class="app-shell">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">SUBSCRIPTION TRACKER</p>
+          <h1>구독 관리</h1>
+          <p class="page-description">매달 나가는 구독료를 한눈에 확인해 보세요.</p>
+        </div>
+      </header>
+
+      <!-- 월/연 구독료와 이번 주 결제 건수를 보여주는 요약 카드입니다.
+           id가 붙은 숫자는 JavaScript가 계산 결과로 바꿉니다. -->
+      <section class="summary-grid" aria-label="구독 요약">
+        <article class="summary-card summary-card-primary">
+          <p class="summary-label">월 구독료</p>
+          <p class="summary-value" id="monthly-total">₩0</p>
+          <p class="summary-note">연간 구독은 월 금액으로 환산해요</p>
+        </article>
+        <article class="summary-card">
+          <p class="summary-label">연간 예상 지출</p>
+          <p class="summary-value" id="annual-total">₩0</p>
+          <p class="summary-note">현재 구독 기준</p>
+        </article>
+        <article class="summary-card">
+          <p class="summary-label">이번 주 결제 예정</p>
+          <p class="summary-value" id="upcoming-total">0건</p>
+          <p class="summary-note">오늘부터 7일 이내</p>
+        </article>
+      </section>
+
+      <!-- 데스크톱에서는 구독 목록과 오른쪽 정보를 나란히 배치합니다.
+           화면이 좁으면 CSS가 세로 방향으로 바꿉니다. -->
+      <div class="content-grid">
+        <section class="panel subscriptions-panel" aria-labelledby="subscriptions-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">MY SERVICES</p>
+              <h2 id="subscriptions-heading">내 구독</h2>
+            </div>
+            <span class="item-count" id="subscription-count">0개</span>
+          </div>
+          <!-- JavaScript가 저장된 구독마다 카드 하나를 만들어 이곳에 넣습니다. -->
+          <div class="subscription-list" id="subscription-list" aria-live="polite"></div>
+        </section>
+
+        <aside class="side-column">
+          <!-- 구독을 카테고리별로 합산한 금액과 비중 막대가 표시됩니다. -->
+          <section class="panel category-panel" aria-labelledby="category-heading">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">MONTHLY BREAKDOWN</p>
+                <h2 id="category-heading">카테고리별 비중</h2>
+              </div>
+            </div>
+            <!-- JavaScript가 카테고리별 내용을 이 영역에 그립니다. -->
+            <div class="category-list" id="category-list"></div>
+          </section>
+
+          <!-- 하나의 폼을 추가와 수정에 함께 사용합니다.
+               숨겨진 id 입력칸이 비어 있으면 새 항목, 값이 있으면 기존 항목 수정입니다. -->
+          <section class="panel form-panel" aria-labelledby="form-heading">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">GET STARTED</p>
+                <h2 id="form-heading">구독 추가</h2>
+              </div>
+            </div>
+            <form id="subscription-form">
+              <input type="hidden" id="subscription-id">
+
+              <!-- label의 for 값은 입력칸의 id와 같아야 서로 연결됩니다. -->
+              <label for="name">구독 이름</label>
+              <input id="name" name="name" type="text" maxlength="60" placeholder="예: 음악 스트리밍" required>
+
+              <label for="amount">결제 금액 (원)</label>
+              <input id="amount" name="amount" type="number" min="1" step="1" inputmode="numeric" placeholder="예: 10900" required>
+
+              <label for="cycle">결제 주기</label>
+              <select id="cycle" name="cycle" required>
+                <option value="monthly">매월</option>
+                <option value="yearly">매년</option>
+              </select>
+
+              <label for="next-payment-date">다음 결제일</label>
+              <input id="next-payment-date" name="nextPaymentDate" type="date" required>
+
+              <label for="category">카테고리</label>
+              <select id="category" name="category" required>
+                <option value="영상">영상</option>
+                <option value="음악">음악</option>
+                <option value="운동">운동</option>
+                <option value="생산성">생산성</option>
+                <option value="기타">기타</option>
+              </select>
+
+              <div class="form-actions">
+                <button class="button button-primary" id="submit-button" type="submit">구독 추가</button>
+                <button class="button button-secondary" id="cancel-edit-button" type="button" hidden>취소</button>
+              </div>
+              <!-- 저장이나 읽기 중 오류가 있으면 안내 메시지가 이곳에 표시됩니다. -->
+              <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+            </form>
+          </section>
+        </aside>
+      </div>
+      <!-- 데이터는 서버가 아닌 현재 브라우저의 localStorage에 저장됩니다. -->
+      <footer class="page-footer">입력한 내용은 이 브라우저에 저장됩니다.</footer>
+    </main>
+  </body>
+</html>
